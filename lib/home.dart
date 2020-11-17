@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_app/movie_details.dart';
 import 'package:movie_app/reusable_card.dart';
 import 'package:swipedetector/swipedetector.dart';
+import 'package:http/http.dart' as http;
 
 class Home extends StatefulWidget {
   @override
@@ -11,10 +14,33 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   Text title = Text('MovieApp');
+  var overview;
+  var originalTitle;
+  var releaseDate;
+  var voteAverage;
+
+  getMovies() async {
+    http.Response response = await http.get(
+        'https://api.themoviedb.org/3/movie/550?api_key=34baee43a0c7f15987e896eee3d30b82');
+    var results = jsonDecode(response.body);
+    setState(() {
+      this.overview = results['overview'];
+      this.originalTitle = results['original_title'];
+      this.releaseDate = results['release_date'];
+      this.voteAverage = results['vote_average'];
+    });
+  }
+
   double sliderPosition = 1.0;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    print(sliderPosition);
+    getMovies();
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -144,32 +170,39 @@ class _HomeState extends State<Home> {
                         ),
                       ),
                       Text(
-                        'Project Power',
+                        '$originalTitle',
                         style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.normal),
+                          fontSize: 16,
+                          fontWeight: FontWeight.normal,
+                        ),
                       ),
                       Row(
                         children: [
                           Text(
-                            '2020',
+                            '$releaseDate',
                             style: TextStyle(
-                                fontSize: 13, fontWeight: FontWeight.normal),
+                              fontSize: 13,
+                              fontWeight: FontWeight.normal,
+                            ),
                           ),
                           Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 20)),
+                            padding: EdgeInsets.symmetric(horizontal: 5),
+                          ),
                           Text(
-                            '6.7⭐',
+                            '$voteAverage⭐',
                             style: TextStyle(
-                                fontSize: 13, fontWeight: FontWeight.normal),
+                              fontSize: 13,
+                              fontWeight: FontWeight.normal,
+                            ),
                           ),
                         ],
-                      )
+                      ),
                     ],
                   ),
                 );
               },
             ),
-          )
+          ),
         ],
       ),
     );
