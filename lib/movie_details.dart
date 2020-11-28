@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:movie_app/reusable_card.dart';
 
 class MovieDetails extends StatefulWidget {
+  final movie;
+  var image_url = 'https://image.tmdb.org/t/p/w500/';
+  MovieDetails(this.movie);
   @override
   _MovieDetailsState createState() => _MovieDetailsState();
 }
@@ -28,14 +31,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                     ),
                   ),
                   child: ClipRRect(
-                    child: Center(
-                      child: Image.asset(
-                        'images/projectpower.jpeg',
-                        height: double.infinity,
-                        width: MediaQuery.of(context).size.width,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+                    child: Center(),
                     borderRadius: BorderRadius.all(Radius.circular(20.0)),
                   ),
                 ),

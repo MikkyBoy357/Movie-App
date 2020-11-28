@@ -14,8 +14,10 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   Text title = Text('MovieApp');
+  var image_url;
+  var movies;
   var overview;
-  var originalTitle;
+  var movieTitle;
   var releaseDate;
   var voteAverage;
 
@@ -23,23 +25,23 @@ class _HomeState extends State<Home> {
     http.Response response = await http.get(
         'https://api.themoviedb.org/3/movie/550?api_key=34baee43a0c7f15987e896eee3d30b82');
     var results = jsonDecode(response.body);
-    setState(() {
-      this.overview = results['overview'];
-      this.originalTitle = results['original_title'];
-      this.releaseDate = results['release_date'];
-      this.voteAverage = results['vote_average'];
-    });
   }
 
   double sliderPosition = 1.0;
 
-  @override
-  void initState() {
-    super.initState();
+  void getData() async {
+    var data = await getJson();
+
+    setState(() {
+      movies = data['results'];
+      image_url = 'https://image.tmdb.org/t/p/w500/';
+      movieTitle = movies[0]['title'];
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    getData();
     getMovies();
     return Scaffold(
       appBar: AppBar(
@@ -63,41 +65,31 @@ class _HomeState extends State<Home> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MovieDetails(),
-                    ),
-                  );
+              SwipeDetector(
+                onSwipeRight: () {
+                  sliderPosition > 0 ? sliderPosition-- : sliderPosition = 0;
+                  setState(() {
+                    print(sliderPosition);
+                  });
                 },
-                child: SwipeDetector(
-                  onSwipeRight: () {
-                    sliderPosition > 0 ? sliderPosition-- : sliderPosition = 0;
-                    setState(() {
-                      print(sliderPosition);
-                    });
-                  },
-                  onSwipeLeft: () {
-                    sliderPosition < 2 ? sliderPosition++ : sliderPosition = 2;
-                    setState(() {
-                      print(sliderPosition);
-                    });
-                  },
-                  child: ReusableCard(
-                    height: MediaQuery.of(context).size.height / 3.3,
-                    width: MediaQuery.of(context).size.width,
-                    cardChild: ClipRRect(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(13.0),
-                      ),
-                      child: Image.asset(
-                        sliderPosition == 1
-                            ? 'images/projectpower2.jpeg'
-                            : 'images/avengers.jpeg',
-                        fit: BoxFit.cover,
-                      ),
+                onSwipeLeft: () {
+                  sliderPosition < 2 ? sliderPosition++ : sliderPosition = 2;
+                  setState(() {
+                    print(sliderPosition);
+                  });
+                },
+                child: ReusableCard(
+                  height: MediaQuery.of(context).size.height / 3.3,
+                  width: MediaQuery.of(context).size.width,
+                  cardChild: ClipRRect(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(13.0),
+                    ),
+                    child: Image.asset(
+                      sliderPosition == 1
+                          ? 'images/projectpower2.jpeg'
+                          : 'images/avengers.jpeg',
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
@@ -154,50 +146,75 @@ class _HomeState extends State<Home> {
             // color: Colors.blue,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: 5,
+              itemCount: movies == null ? 0 : movies.length,
               itemBuilder: (context, i) {
-                return Container(
-                  height: 100,
-                  child: Column(
-                    children: [
-                      ReusableCard(
-                        // colour: Colors.blue,
-                        height: 160,
-                        width: 97,
-                        cardChild: Image.asset(
-                          'images/projectpower.jpeg',
-                          fit: BoxFit.fill,
-                        ),
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MovieDetails(movies[i]),
                       ),
-                      Text(
-                        '$originalTitle',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.normal,
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            '$releaseDate',
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.normal,
+                    );
+                  },
+                  child: Container(
+                    height: 100,
+                    child: Column(
+                      children: [
+                        ReusableCard(
+                          // colour: Colors.blue,
+                          height: 160,
+                          width: 97,
+                          cardChild: Image(
+                            image: NetworkImage(
+                              image_url + movies[i]['poster_path'],
                             ),
+                            fit: BoxFit.cover,
                           ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 5),
-                          ),
-                          Text(
-                            '$voteAverage⭐',
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.normal,
+                        ),
+                        Column(
+                          children: [
+                            Container(
+                              width: 150.0,
+                              child: Column(
+                                children: [
+                                  Text(
+                                    movies[i]['title'],
+                                    overflow: TextOverflow.clip,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              '$releaseDate',
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 5),
+                            ),
+                            Text(
+                              '$voteAverage⭐',
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },
@@ -207,4 +224,11 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+}
+
+Future<Map> getJson() async {
+  var apiKey = '34baee43a0c7f15987e896eee3d30b82';
+  var url = 'http://api.themoviedb.org/3/discover/movie?api_key=${apiKey}';
+  var response = await http.get(url);
+  return json.decode(response.body);
 }
