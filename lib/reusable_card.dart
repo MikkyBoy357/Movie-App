@@ -24,12 +24,12 @@ class ReusableCard extends StatelessWidget {
         width: width,
         child: ClipRRect(
           child: cardChild,
-          borderRadius: BorderRadius.all(Radius.circular(13.0)),
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
         ),
         margin: EdgeInsets.all(15.0),
         decoration: BoxDecoration(
           color: colour,
-          borderRadius: BorderRadius.circular(13.0),
+          borderRadius: BorderRadius.circular(10.0),
           border: Border.all(color: Colors.black),
         ),
       ),
