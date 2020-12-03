@@ -2,15 +2,18 @@
 
 A Flutter movie App.
 
-## Getting Started
+## ✨ Requirements
+* Any Operating System (ie. MacOS X, Linux, Windows)
+* Any IDE with Flutter SDK installed (ie. IntelliJ, Android Studio, VSCode etc)
+* A little knowledge of Dart and Flutter
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+## 📸 ScreenShots
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+<img src="screenshots/screenshot1.png" width="300"/> <img src="screenshots/home.png" width="400"/>
+<img src="screenshots/home2.png" width="400"/> <img src="screenshots/details.png" width="400"/>
+<img src="screenshots/details" width="400"/>
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+## 🤓 Author(s)
+**Michael Olusegun**
