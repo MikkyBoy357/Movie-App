@@ -10,9 +10,8 @@ A Flutter movie App.
 
 ## 📸 ScreenShots
 
-<img src="screenshots/screenshot1.png" width="300"/> <img src="screenshots/home.png" width="400"/>
-<img src="screenshots/home2.png" width="400"/> <img src="screenshots/details.png" width="400"/>
-<img src="screenshots/details" width="400"/>
+<img src="screenshots/screenshot1.png" width="300"/> <img src="screenshots/home.jpeg" width="300"/>
+<img src="screenshots/home2.jpeg" width="300"/> <img src="screenshots/details.jpeg" width="300"/>
 
 
 ## 🤓 Author(s)
